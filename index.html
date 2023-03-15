@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Matador de Monstro</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div v-if="gameFinished" class="panel result">
+            <div v-if="victory" class="win">Você ganhou!!! :)
+                <br>
+                <img src="https://media.tenor.com/k-tV1c5bCCkAAAAM/cat-smile-happy-cat.gif" style="height: 200px;">
+            </div>
+            <div v-else class="lose">Você perdeu! :(
+                <br>
+                <img src="https://media.tenor.com/o9owbF_iALAAAAAC/sad-cat.gif" style="height: 200px;">
+            </div>
+        </div>
+        <div v-if="gameRunnig" class="panel scores">
+            <div class="score">
+                <h1>Jogador</h1>
+                <div class="life-bar">
+                    <div class="life"
+                    :class="{danger: playerLife < 20}"
+                    :style="playerLifeBar"></div>
+                </div>
+                <div>{{ playerLife }}</div>
+                <div class="mana-bar">
+                    <div class="mana" :style="playerMpBar"></div>
+                </div>
+                <div>{{ playerMp }}</div>
+            </div>
+            <div class="score">
+                <h1>Monstro</h1>
+                <div class="life-bar">
+                    <div class="life"
+                    :class="{danger: monsterLife < 20}"
+                    :style="monsterLifeBar"></div>
+                </div>
+                <div>{{ monsterLife }}</div>
+            </div>
+        </div>
+        <div class="panel buttons">
+            <template v-if="gameRunnig">
+                <button @click="playerAction('normalAttack')" class="btn attack">Ataque</button>
+                <button @click="playerAction('specialAttack')" class="btn especial-attack" :class="{disable: playerMp < 60}" >Ataque Especial</button>
+                <button @click="playerAction('heal')" class="btn heal" :class="{disable: playerMp < 40}" >Curar</button>
+                <button @click="giveUp" class="btn give-up">Desistir</button>
+            </template>
+            <button v-if="!gameRunnig" @click="startGame" class="btn new-game">Iniciar Jogo</button>
+        </div>
+        <div v-if="gameRunnig" class="panel logs">
+            <ul v-for="battleLog in battleLogs">
+                <li v-if="battleLog[1] == 'player'" class="player">{{ battleLog[0] }}</li>
+                <li v-if="battleLog[1] == 'monster'" class="monster">{{ battleLog[0] }}</li>
+            </ul>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
